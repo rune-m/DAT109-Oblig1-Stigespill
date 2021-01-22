@@ -76,12 +76,15 @@ public class GameController {
 
         System.out.println("\nResultatliste:");
         for (int i = 1; i <= playersFinished.size(); i++) {
-            System.out.println(i + ". " + playersFinished.get(i - 1));
+            System.out.println(i + ". " + playersFinished.get(i - 1).getName());
         }
     }
 
 
     /**
+     * Moves a player from old to new position and saves details about the move in a PlayerMoveDetails object.
+     * Deals with the different scenarios a move can have. Landing on ladder/snake, rolling six, reaching goal line etc.
+     *
      * @param player to be moved
      * @return Details about a players move
      */

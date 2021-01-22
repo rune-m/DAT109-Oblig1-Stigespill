@@ -3,6 +3,7 @@
 .idea
 *.iml
 .DS_Store
+META-INF
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Java template
