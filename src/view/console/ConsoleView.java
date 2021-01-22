@@ -15,9 +15,11 @@ public class ConsoleView {
     public ConsoleView() {
     }
 
+    /**
+     * Starts the console view
+     */
     public void start() {
         createPlayers();
-//        startGame(game.getPlayers());
         game.startGame(this::playersTurn, this::nextMove);
     }
 
@@ -36,9 +38,13 @@ public class ConsoleView {
         game.createPlayers(players);
     }
 
-    // Lambda inn i playGame() i Controller
+    /**
+     * Print the results from a players move to the console.
+     *
+     * @param player moving
+     * @param move   details about the move
+     */
     public void playersTurn(Player player, PlayerMoveDetails move) {
-
         switch (move.getState()) {
             case FINISHED -> System.out.println("  - Trilte " + move.getRolledDice() + " og er i mål som nummer " + move.getPlayerFinishedNumber() + "!");
             case MOVED -> System.out.println("  - Trilte " + move.getRolledDice() + " og flyttet fra " + move.getStartPos() + " til " + move.getEndPos() + ".");
@@ -48,58 +54,37 @@ public class ConsoleView {
             case LOCKED -> System.out.println("  - Trilte " + move.getRolledDice() + ". Du har trilt tre 6'ere på rad og er låst på start (rute 0) frem til du triller en 6'er...");
             default -> System.out.println("ERR: Couldn't print current move");
         }
-
         if (move.oneMoreTurn()) {
             System.out.print("      - Du får trille en gang til siden du fikk en 6'er!");
         }
-
     }
 
+    /**
+     * When running this method the code is waiting to run until 'enter' is pressed by the user
+     */
     public void nextMove() {
         in.readString("");
     }
 
+    /**
+     * Reads a integer from the console withing the min/max range
+     *
+     * @param message to be printed
+     * @param min     minimum value accepted
+     * @param max     maximum value accepted
+     * @return input value
+     */
     public int readBoundedNumber(String message, int min, int max) {
         int value;
         boolean valid;
-
         do {
             value = in.readInt(message);
-
             valid = value <= max && value >= min;
             if (!valid) {
                 System.out.println("Tallet må være mellom " + min + " og " + max);
             }
-
         } while (!valid);
-
         return value;
     }
-
-
-//    public void startGame(List<Player> players) {
-//
-//        List<Player> remainingPlayers = players;
-//
-//        while (remainingPlayers.size() > 1) {
-//
-//            System.out.println(remainingPlayers.size());
-//            remainingPlayers.forEach(this::playersTurn);
-//
-//            System.out.println("-------------------");
-//
-//            remainingPlayers = remainingPlayers.stream()
-//                    .filter(p -> p.getPosition() < 100)
-//                    .collect(Collectors.toList());
-//
-//            try {
-//                Thread.sleep(1000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
-//        System.out.println("DONE");
-//    }
 
 }

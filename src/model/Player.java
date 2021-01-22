@@ -5,7 +5,7 @@ public class Player {
     private final int playerNr;
     private final String name;
     private int position;
-    private int turnsInARow; // Count of a players turn in row if dice = 6
+    private int turnsInARow; // Count of a players turns in row. Increases if dice = 6
 
     public Player(int playerNr, String name) {
         this.playerNr = playerNr;
@@ -45,8 +45,4 @@ public class Player {
         this.position = position;
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
 }

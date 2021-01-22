@@ -12,11 +12,12 @@ public class LadderSnakeList {
     }
 
     /**
-     * Add a ladder/snake key/value to the map.
+     * Add a ladder/snake key/value to the HashMap.
      * Key of the map instance is the start of the ladder/snake.
      * Value of the map instance is the end of the ladder/snake.
+     *
      * @param from Key
-     * @param to Value
+     * @param to   Value
      */
     public void add(int from, int to) {
         map.put(from, to);
@@ -24,8 +25,9 @@ public class LadderSnakeList {
 
     /**
      * Check whether of not the position given contains the start of a ladder/snake.
-     * If true, return the end of ladder/snake (value in map).
+     * If true, return the end of ladder/snake (Value in HashMap).
      * If false, return -1.
+     *
      * @param pos the tile the players moves to
      * @return end of ladder/snake or -1
      */

@@ -10,6 +10,7 @@ public class Dice {
 
     /**
      * Simulate rolling a dice with n sides
+     *
      * @return result of the dice
      */
     public int roll() {

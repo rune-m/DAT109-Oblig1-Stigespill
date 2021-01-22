@@ -6,6 +6,9 @@ public class ReadFromConsole {
 
     private final Scanner in = new Scanner(System.in);
 
+    public ReadFromConsole() {
+    }
+
     /**
      * Print a message to the console and then read the next line.
      *
@@ -19,7 +22,8 @@ public class ReadFromConsole {
 
     /**
      * Print a message to the console and then read the next line of type Integer.
-     * The input must be a positive integer.
+     * The input must be a positive integer. If it is negative
+     *
      * @param message initial message to print prior to the read from console
      * @return the Integer input from the console
      */
@@ -29,7 +33,7 @@ public class ReadFromConsole {
         while (input < 0) {
             try {
                 // Using parseInt() as I have bad experience with Scanner.class's nextInt()
-                input = Math.abs(Integer.parseInt(in.nextLine()));
+                input = Integer.parseInt(in.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("...Your input must be a positive integer!");
             }

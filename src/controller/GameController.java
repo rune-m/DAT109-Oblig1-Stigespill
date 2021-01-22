@@ -15,26 +15,27 @@ public class GameController {
 
     private final Dice dice = new Dice();
     private final List<Player> playersFinished = new ArrayList<>();
-
-    //    private int numberOfPlayers;
     private LadderSnakeList laddersAndSnakes;
     private List<Player> players;
-
-    // TODO Result list at game end
 
     public GameController() {
         setLaddersAndSnakes();
     }
 
     /**
-     * Initialize array players to the given @param
+     * Initialize players list to the given @param
      *
-     * @param players array of players generated from the ui
+     * @param players list of players generated from the ui
      */
     public void createPlayers(List<Player> players) {
         this.players = players;
     }
 
+    /**
+     * Moving a player from players list to finishedPlayers list
+     *
+     * @param player that is going to be moved
+     */
     public void playerFinished(Player player) {
         players = players.stream()
                 .filter(p -> p.getPlayerNr() != player.getPlayerNr())
@@ -42,6 +43,12 @@ public class GameController {
         playersFinished.add(player);
     }
 
+    /**
+     * Starting the game. Looping through all players. Running until all except one player is finished.
+     *
+     * @param view           the view displaying the result about the move
+     * @param signalNextTurn method that stops the code until user input
+     */
     public void startGame(BiConsumer<Player, PlayerMoveDetails> view, Runnable signalNextTurn) {
 
         while (players.size() > 1) {
@@ -75,8 +82,8 @@ public class GameController {
 
 
     /**
-     * @param player a
-     * @return b
+     * @param player to be moved
+     * @return Details about a players move
      */
     public PlayerMoveDetails movePlayer(Player player) {
 
