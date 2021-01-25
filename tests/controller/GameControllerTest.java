@@ -26,7 +26,7 @@ public class GameControllerTest {
         player2 = new Player(2, "TestPlayer2");
 
         // All functionality inside this method is tested in LadderSnakeListTest.class
-        game.setLaddersAndSnakes();
+//        game.setLaddersAndSnakes();
 
         tiles = game.getTiles();
         positionCloseToGoal = tiles - 3;

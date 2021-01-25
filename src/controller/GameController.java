@@ -14,12 +14,13 @@ public class GameController {
     private final int TILES = 100;
 
     private final Dice dice = new Dice();
-    private LadderSnakeList laddersAndSnakes;
+//    private LadderSnakeList laddersAndSnakes;
     private List<Player> players;
     private final List<Player> playersFinished = new ArrayList<>();
 
+    private GameBoard board = new GameBoard();
+
     public GameController() {
-        setLaddersAndSnakes();
     }
 
     /**
@@ -63,15 +64,9 @@ public class GameController {
                         signalNextTurn.run();
                         move = movePlayer(p, dice.roll());
                         view.accept(p, move);
-//                    } while (p.getTurnsInARow() < 3 && move.getRolledDice() == 6);
                     } while (move.oneMoreTurn());
                 }
             });
-//            try {
-//                Thread.sleep(10);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
         }
         addLastPlayer();
 
@@ -124,7 +119,7 @@ public class GameController {
         }
 
 
-        int newPosAfterSnakeLadder = laddersAndSnakes.checkLadderSnake(newPosition);
+        int newPosAfterSnakeLadder = board.checkLadderSnake(newPosition);
 
         if (newPosAfterSnakeLadder != -1) { // Check for ladder/snake at the new position
             player.setPosition(newPosAfterSnakeLadder);
@@ -165,32 +160,6 @@ public class GameController {
 
     public int getTiles() {
         return TILES;
-    }
-
-    /**
-     * Assig the predefined ladders and snakes to the ladderAndSnakes data structure.
-     * Placed in a function for cleaner constructor
-     */
-    public void setLaddersAndSnakes() {
-        laddersAndSnakes = new LadderSnakeList();
-        // Ladders
-        laddersAndSnakes.add(1, 38);
-        laddersAndSnakes.add(4, 14);
-        laddersAndSnakes.add(9, 31);
-        laddersAndSnakes.add(21, 42);
-        laddersAndSnakes.add(28, 84);
-        laddersAndSnakes.add(51, 67);
-        laddersAndSnakes.add(71, 91);
-        laddersAndSnakes.add(80, 99);
-        // Snakes
-        laddersAndSnakes.add(17, 7);
-        laddersAndSnakes.add(54, 34);
-        laddersAndSnakes.add(62, 19);
-        laddersAndSnakes.add(64, 60);
-        laddersAndSnakes.add(87, 24);
-        laddersAndSnakes.add(93, 73);
-        laddersAndSnakes.add(95, 75);
-        laddersAndSnakes.add(98, 79);
     }
 
     public List<Player> getPlayers() {

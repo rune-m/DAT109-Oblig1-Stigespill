@@ -51,4 +51,77 @@ public class Player {
         this.position = position;
     }
 
+
+    /**
+     * Moves a player from old to new position and saves details about the move in a PlayerMoveDetails object.
+     * Deals with the different scenarios a move can have. Landing on ladder/snake, rolling six, reaching goal line etc.
+     *
+     * @param player to be moved
+     * @return Details about a players move
+     */
+    public PlayerMoveDetails movePlayer(int rolledDice, GameBoard board) {
+
+//        int rolledDice = dice.roll();
+//        rolledDice = 6;
+        int oldPosition = position;
+        int newPosition = position + rolledDice;
+
+        // Creating new PlayerMoveDetails-object with parameters rolledDice and startPos for the move
+        PlayerMoveDetails move = new PlayerMoveDetails(rolledDice, oldPosition);
+
+        if (locked) {
+            if (rolledDice != 6) {
+                move.setState(PlayerStates.LOCKED);
+                move.setEndPos(0);
+                return move;
+            } else {
+                locked = false;
+            }
+        }
+
+        // Check for one more turn or locked
+        if (rolledDice == 6) {
+            incrementTurnsInARow();
+            if (turnsInARow == 3) {
+                move.setState(PlayerStates.LOCKED);
+                position = 0;
+                move.setEndPos(0);
+                return move;
+            }
+            move.setOneMoreTurn(true);
+        } else {
+            resetTurnsInARow();
+        }
+
+
+        int newPosAfterSnakeLadder = board.checkLadderSnake(newPosition);
+
+        if (newPosAfterSnakeLadder != -1) { // Check for ladder/snake at the new position
+            position = newPosAfterSnakeLadder;
+
+            PlayerStates state = newPosAfterSnakeLadder - newPosition > 0 ? PlayerStates.LADDER : PlayerStates.SNAKE;
+            move.setState(state);
+            move.setLadderSnakeStart(newPosition);
+            move.setEndPos(newPosAfterSnakeLadder);
+        } else if (newPosition < board.getTILES()) { // Traditional move
+            position = newPosition;
+
+            move.setState(PlayerStates.MOVED);
+            move.setEndPos(newPosition);
+        } else if (newPosition > board.getTILES()) { // Outside the table, go back
+            move.setState(PlayerStates.SAME_POS);
+            move.setEndPos(oldPosition);
+        } else { // Goal
+            position = newPosition;
+            move.setEndPos(newPosition);
+            playerFinished(player);
+
+            move.setState(PlayerStates.FINISHED);
+            move.setPlayerFinishedNumber(playersFinished.size());
+
+        }
+
+        return move;
+    }
+
 }
