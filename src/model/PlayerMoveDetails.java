@@ -56,9 +56,10 @@ public class PlayerMoveDetails {
      * @return if the player should roll the dice once more
      */
     public boolean oneMoreTurn() {
-        boolean returnValue = oneMoreTurn;
-        oneMoreTurn = !oneMoreTurn;
-        return returnValue;
+//        boolean returnValue = oneMoreTurn;
+//        oneMoreTurn = !oneMoreTurn;
+//        return returnValue;
+        return oneMoreTurn;
     }
 
     public void setOneMoreTurn(boolean oneMoreTurn) {

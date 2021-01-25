@@ -14,9 +14,9 @@ public class GameController {
     private final int TILES = 100;
 
     private final Dice dice = new Dice();
-    private final List<Player> playersFinished = new ArrayList<>();
     private LadderSnakeList laddersAndSnakes;
     private List<Player> players;
+    private final List<Player> playersFinished = new ArrayList<>();
 
     public GameController() {
         setLaddersAndSnakes();
@@ -61,9 +61,10 @@ public class GameController {
                     PlayerMoveDetails move;
                     do {
                         signalNextTurn.run();
-                        move = movePlayer(p);
+                        move = movePlayer(p, dice.roll());
                         view.accept(p, move);
-                    } while (p.getTurnsInARow() < 3 && move.getRolledDice() == 6);
+//                    } while (p.getTurnsInARow() < 3 && move.getRolledDice() == 6);
+                    } while (move.oneMoreTurn());
                 }
             });
 //            try {
@@ -88,9 +89,10 @@ public class GameController {
      * @param player to be moved
      * @return Details about a players move
      */
-    public PlayerMoveDetails movePlayer(Player player) {
+    public PlayerMoveDetails movePlayer(Player player, int rolledDice) {
 
-        int rolledDice = dice.roll();
+//        int rolledDice = dice.roll();
+//        rolledDice = 6;
         int oldPosition = player.getPosition();
         int newPosition = player.getPosition() + rolledDice;
 
@@ -100,23 +102,27 @@ public class GameController {
         if (player.isLocked()) {
             if (rolledDice != 6) {
                 move.setState(PlayerStates.LOCKED);
+                move.setEndPos(0);
                 return move;
+            } else {
+                player.setLocked(false);
             }
-        } else {
-            player.removeLock();
         }
 
         // Check for one more turn or locked
         if (rolledDice == 6) {
             player.incrementTurnsInARow();
-            if (player.isLocked()) {
+            if (player.getTurnsInARow() == 3) {
                 move.setState(PlayerStates.LOCKED);
+                player.setPosition(0);
+                move.setEndPos(0);
                 return move;
             }
             move.setOneMoreTurn(true);
+        } else {
+            player.resetTurnsInARow();
         }
 
-        player.removeLock();
 
         int newPosAfterSnakeLadder = laddersAndSnakes.checkLadderSnake(newPosition);
 
@@ -137,6 +143,7 @@ public class GameController {
             move.setEndPos(oldPosition);
         } else { // Goal
             player.setPosition(newPosition);
+            move.setEndPos(newPosition);
             playerFinished(player);
 
             move.setState(PlayerStates.FINISHED);
@@ -147,6 +154,10 @@ public class GameController {
         return move;
     }
 
+    /**
+     * Used when the game is over (only one player remaining). Moves the last remaining player to the
+     * finishedPlayers list for easily displaying a results list at the end of the game.
+     */
     public void addLastPlayer() {
         Optional<Player> first = players.stream().findFirst();
         first.ifPresent(this::playerFinished);
@@ -169,17 +180,24 @@ public class GameController {
         laddersAndSnakes.add(21, 42);
         laddersAndSnakes.add(28, 84);
         laddersAndSnakes.add(51, 67);
-        laddersAndSnakes.add(80, 99);
         laddersAndSnakes.add(71, 91);
+        laddersAndSnakes.add(80, 99);
         // Snakes
         laddersAndSnakes.add(17, 7);
-        laddersAndSnakes.add(62, 19);
-        laddersAndSnakes.add(87, 24);
         laddersAndSnakes.add(54, 34);
+        laddersAndSnakes.add(62, 19);
         laddersAndSnakes.add(64, 60);
+        laddersAndSnakes.add(87, 24);
         laddersAndSnakes.add(93, 73);
-        laddersAndSnakes.add(98, 79);
         laddersAndSnakes.add(95, 75);
+        laddersAndSnakes.add(98, 79);
     }
 
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public List<Player> getPlayersFinished() {
+        return playersFinished;
+    }
 }
