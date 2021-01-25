@@ -48,13 +48,13 @@ public class ConsoleView {
         switch (move.getState()) {
             case FINISHED -> System.out.println("  - Trilte " + move.getRolledDice() + " og er i mål som nummer " + move.getPlayerFinishedNumber() + "!");
             case MOVED -> System.out.println("  - Trilte " + move.getRolledDice() + " og flyttet fra " + move.getStartPos() + " til " + move.getEndPos() + ".");
-            case SAME_POS -> System.out.println("  - Blir stående i ro på " + move.getEndPos() + " etter å ha trilt " + move.getRolledDice() + ". Må trille " + (game.getTiles() - move.getEndPos()) + " for å nå mål...");
+            case SAME_POS -> System.out.println("  - Blir stående i ro på " + move.getEndPos() + " etter å ha trilt " + move.getRolledDice() + ". Må trille " + (game.getBoard().getTiles() - move.getEndPos()) + " for å nå mål...");
             case LADDER -> System.out.println("  - Trilte " + move.getRolledDice() + " og flyttet fra " + move.getStartPos() + " til en STIGE på rute " + move.getLadderSnakeStart() + ". Klatrer til " + move.getEndPos() + "!");
             case SNAKE -> System.out.println("  - Trilte " + move.getRolledDice() + " og flyttet fra " + move.getStartPos() + " til en SLANGE på rute " + move.getLadderSnakeStart() + ". Sklir ned til " + move.getEndPos() + "!");
             case LOCKED -> System.out.println("  - Trilte " + move.getRolledDice() + ". Du har trilt tre 6'ere på rad og er låst på start (rute 0) frem til du triller en 6'er...");
             default -> System.out.println("ERR: Couldn't print current move");
         }
-        if (move.oneMoreTurn()) {
+        if (move.hasOneMoreTurn()) {
             System.out.print("      - Du får trille en gang til siden du fikk en 6'er!");
         }
     }

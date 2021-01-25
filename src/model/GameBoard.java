@@ -6,15 +6,27 @@ import java.util.Map;
 public class GameBoard {
 
     private final int TILES = 100;
-    private final Map<Integer, Integer> laddersAndSnakes;
+    private Map<Integer, Integer> laddersAndSnakes;
 
     public GameBoard() {
         this.laddersAndSnakes = new HashMap<>();
         setLaddersAndSnakes();
     }
 
-    public int getTILES() {
+    public int getTiles() {
         return TILES;
+    }
+
+    /**
+     * Add a ladder/snake key/value to the HashMap.
+     * Key of the map instance is the start of the ladder/snake.
+     * Value of the map instance is the end of the ladder/snake.
+     *
+     * @param from Key
+     * @param to   Value
+     */
+    public void addLadderSnake(int from, int to) {
+        laddersAndSnakes.put(from, to);
     }
 
     /**
@@ -52,6 +64,13 @@ public class GameBoard {
         laddersAndSnakes.put(93, 73);
         laddersAndSnakes.put(95, 75);
         laddersAndSnakes.put(98, 79);
+    }
+
+    /**
+     * Remove all ladders and snakes from the board. Used for testing purposes.
+     */
+    public void removeLaddersAndSnakes() {
+        laddersAndSnakes = new HashMap<>();
     }
 
 }

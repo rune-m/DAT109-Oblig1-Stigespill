@@ -51,7 +51,6 @@ public class Player {
         this.position = position;
     }
 
-
     /**
      * Moves a player from old to new position and saves details about the move in a PlayerMoveDetails object.
      * Deals with the different scenarios a move can have. Landing on ladder/snake, rolling six, reaching goal line etc.
@@ -61,64 +60,49 @@ public class Player {
      */
     public PlayerMoveDetails movePlayer(int rolledDice, GameBoard board) {
 
-//        int rolledDice = dice.roll();
-//        rolledDice = 6;
         int oldPosition = position;
         int newPosition = position + rolledDice;
-
-        // Creating new PlayerMoveDetails-object with parameters rolledDice and startPos for the move
-        PlayerMoveDetails move = new PlayerMoveDetails(rolledDice, oldPosition);
+        PlayerMoveDetails move;
 
         if (locked) {
             if (rolledDice != 6) {
-                move.setState(PlayerStates.LOCKED);
-                move.setEndPos(0);
+                move = new PlayerMoveDetails(PlayerStates.LOCKED, rolledDice, oldPosition, 0, -1);
                 return move;
             } else {
                 locked = false;
             }
         }
 
-        // Check for one more turn or locked
+        // Check for one more turn, if not lock
         if (rolledDice == 6) {
             incrementTurnsInARow();
             if (turnsInARow == 3) {
-                move.setState(PlayerStates.LOCKED);
                 position = 0;
-                move.setEndPos(0);
+                move = new PlayerMoveDetails(PlayerStates.LOCKED, rolledDice, oldPosition, position, -1);
                 return move;
             }
-            move.setOneMoreTurn(true);
         } else {
             resetTurnsInARow();
         }
-
 
         int newPosAfterSnakeLadder = board.checkLadderSnake(newPosition);
 
         if (newPosAfterSnakeLadder != -1) { // Check for ladder/snake at the new position
             position = newPosAfterSnakeLadder;
-
             PlayerStates state = newPosAfterSnakeLadder - newPosition > 0 ? PlayerStates.LADDER : PlayerStates.SNAKE;
-            move.setState(state);
-            move.setLadderSnakeStart(newPosition);
-            move.setEndPos(newPosAfterSnakeLadder);
-        } else if (newPosition < board.getTILES()) { // Traditional move
+            move = new PlayerMoveDetails(state, rolledDice, oldPosition, position, newPosition);
+        } else if (newPosition < board.getTiles()) { // Traditional move
             position = newPosition;
-
-            move.setState(PlayerStates.MOVED);
-            move.setEndPos(newPosition);
-        } else if (newPosition > board.getTILES()) { // Outside the table, go back
-            move.setState(PlayerStates.SAME_POS);
-            move.setEndPos(oldPosition);
+            move = new PlayerMoveDetails(PlayerStates.MOVED, rolledDice, oldPosition, position, -1);
+        } else if (newPosition > board.getTiles()) { // Outside the table, go back
+            move = new PlayerMoveDetails(PlayerStates.SAME_POS, rolledDice, oldPosition, position, -1);
         } else { // Goal
             position = newPosition;
-            move.setEndPos(newPosition);
-            playerFinished(player);
+            move = new PlayerMoveDetails(PlayerStates.FINISHED, rolledDice, oldPosition, position, -1);
+        }
 
-            move.setState(PlayerStates.FINISHED);
-            move.setPlayerFinishedNumber(playersFinished.size());
-
+        if (rolledDice == 6) {
+            move.setOneMoreTurn(true);
         }
 
         return move;

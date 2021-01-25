@@ -3,27 +3,31 @@ package model;
 public class PlayerMoveDetails {
 
     // The state of the player move
-    private PlayerStates state = PlayerStates.UNKNOWN;
-    private final int rolledDice;
-    private final int startPos;
+    private PlayerStates state;
+
+    private int rolledDice;
+    private int startPos;
     private int endPos;
+
     // The start of a ladder/snake if used
     private int ladderSnakeStart;
+
+    // Players finish number
     private int playerFinishedNumber;
+
     // True if the players rolls six
     private boolean oneMoreTurn;
 
-    public PlayerMoveDetails(int rolledDice, int startPos) {
+    public PlayerMoveDetails(PlayerStates state, int rolledDice, int startPos, int endPos, int ladderSnakeStart) {
+        this.state = state;
         this.rolledDice = rolledDice;
         this.startPos = startPos;
+        this.endPos = endPos;
+        this.ladderSnakeStart = ladderSnakeStart;
     }
 
     public PlayerStates getState() {
         return state;
-    }
-
-    public void setState(PlayerStates state) {
-        this.state = state;
     }
 
     public int getStartPos() {
@@ -42,23 +46,11 @@ public class PlayerMoveDetails {
         return endPos;
     }
 
-    public void setEndPos(int endPos) {
-        this.endPos = endPos;
-    }
-
     public int getRolledDice() {
         return rolledDice;
     }
 
-    /**
-     * Checks and returns the value of oneMoreTurn then swaps the boolean
-     *
-     * @return if the player should roll the dice once more
-     */
-    public boolean oneMoreTurn() {
-//        boolean returnValue = oneMoreTurn;
-//        oneMoreTurn = !oneMoreTurn;
-//        return returnValue;
+    public boolean hasOneMoreTurn() {
         return oneMoreTurn;
     }
 
@@ -68,10 +60,6 @@ public class PlayerMoveDetails {
 
     public int getLadderSnakeStart() {
         return ladderSnakeStart;
-    }
-
-    public void setLadderSnakeStart(int ladderSnakeStart) {
-        this.ladderSnakeStart = ladderSnakeStart;
     }
 
 }
