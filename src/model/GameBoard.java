@@ -45,7 +45,7 @@ public class GameBoard {
      * Assig the predefined ladders and snakes to the ladderAndSnakes data structure.
      * Placed in a function for cleaner constructor
      */
-    public void setLaddersAndSnakes() {
+    private void setLaddersAndSnakes() {
         // Ladders
         laddersAndSnakes.put(1, 38);
         laddersAndSnakes.put(4, 14);

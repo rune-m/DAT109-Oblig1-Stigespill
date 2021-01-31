@@ -72,7 +72,7 @@ public class GameController {
      *
      * @param player that is going to be moved
      */
-    public int playerFinished(Player player) {
+    private int playerFinished(Player player) {
         players = players.stream()
                 .filter(p -> p.getPlayerNr() != player.getPlayerNr())
                 .collect(Collectors.toList());
@@ -85,7 +85,7 @@ public class GameController {
      * Used when the game is over (only one player remaining). Moves the last remaining player to the
      * finishedPlayers list for easily displaying a results list at the end of the game.
      */
-    public void addLastPlayer() {
+    private void addLastPlayer() {
         Optional<Player> first = players.stream().findFirst();
         first.ifPresent(this::playerFinished);
     }
